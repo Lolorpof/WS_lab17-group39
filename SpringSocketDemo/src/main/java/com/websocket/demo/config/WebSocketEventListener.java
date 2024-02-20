@@ -7,7 +7,11 @@ import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
+
+import java.util.HashSet;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -23,8 +27,10 @@ public class WebSocketEventListener {
                     .type(MessageType.LEAVE)
                     .sender(username)
                     .build();
-
+            ChatMessage.setUserAmount(ChatMessage.getUserAmount() - 1);
+            chatMessage.setUamount(ChatMessage.getUserAmount());
             messageSendingOperations.convertAndSend("/topic/public", chatMessage);
         }
     }
+
 }
